@@ -3,7 +3,8 @@
 from typing import Final
 from telegram import Update, Bot
 from telegram import InputMediaPhoto
-# import telepot
+from telegram.constants import ParseMode
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, filters, MessageHandler, ContextTypes
 from telegram.ext import Updater
 import requests
@@ -14,6 +15,7 @@ BOT_USERNAME: Final = "@nowplaying_sameerasw_bot"
 APIURL: Final = 'https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=S4m33r4&limit=1&api_key=';
 APIKEY: Final = 'd14224bbdbf51e2b2445f81731bedc57'
 FETCH_URL = f'{APIURL}{APIKEY}&format=json'
+PLAYLIST = 'https://music.youtube.com/playlist?list=PLwPOyB_hI8FvpPFGHdHNEIc7kOowdfoRZ&si=Ih6b0Yh2nsFwpC_E'
 
 # commands
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -33,11 +35,13 @@ async def nowplaying_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
         # extract the url from the message
         song_url = now_playing_text.split('|')[1]
         # extract the album art from the message
-        album_art = now_playing_text.split('|')[2]
-        caption_text = formatted_text(now_playing_text.split('|')[0])
+        if now_playing_text.split('|')[2] == '':
+            album_art = 'https://via.placeholder.com/300'
+        else:
+            album_art = now_playing_text.split('|')[2]
 
-        # send the message as a photo with the album art and the song as a caption
-        await bot.sendPhoto(chat_id, album_art, caption=caption_text)
+        # send the message as a photo with the album art and the song as a caption and add a button to open song info and another to open the playlist
+        await bot.sendPhoto(chat_id, album_art, caption=now_playing_text.split('|')[0], parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Song info 🎵", url=song_url),],[InlineKeyboardButton("Check out my Playlist ▶️", url=PLAYLIST),]]))
 
         previous_song = now_playing_text
 
@@ -46,13 +50,16 @@ async def nowplaying_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
             now_playing_text = fetch_now_playing()
             if now_playing_text != previous_song:
                 song_url = now_playing_text.split('|')[1]
-                album_art = now_playing_text.split('|')[2]
+                if now_playing_text.split('|')[2] == '':
+                    album_art = 'https://via.placeholder.com/300'
+                else:
+                    album_art = now_playing_text.split('|')[2]
                 
                 # update the message as a photo with the album art and the song as a caption using editMessageMedia
-                media = InputMediaPhoto(media=album_art, caption=now_playing_text.split('|')[0])
+                media = InputMediaPhoto(media=album_art, caption=now_playing_text.split('|')[0], parse_mode=ParseMode.HTML)
 
                 try:
-                    await bot.edit_message_media(chat_id=chat_id, message_id=message_id + 1, media=media)
+                    await bot.edit_message_media(chat_id=chat_id, message_id=message_id + 1, media=media, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Song info 🎵", url=song_url),],[InlineKeyboardButton("Check out my Playlist ▶️", url=PLAYLIST),]]))
                     print("Message edited successfully!")
                 except Exception as e:
                     print(f"Error editing message: {e}")
@@ -73,9 +80,6 @@ def handle_response(text: str) -> str:
 
     return "I'm sorry, I'm not able to do that right now."
 
-def formatted_text(text: str) -> str:
-    return "@sameera_s_w is now listening to: " + text.split('*')[0] + " by " + text.split('*')[2]
-
 def fetch_now_playing():
     try:
         response = requests.get(FETCH_URL)
@@ -85,7 +89,7 @@ def fetch_now_playing():
         album = track['album']['#text']
         image = track['image'][3]['#text']
         url = track['url']
-        return f'{track["name"]}* by *{artist} |{url}|{image}'
+        return f'<b>@sameera_s_w</b> is listening to: <b>{track["name"]}</b> by <i>{artist}</i> |{url}|{image}'
     except:
         return "Sorry, I can't get the current song right now. Please try again later."
 
@@ -113,15 +117,20 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 if __name__ == '__main__':
     print('Starting bot...')
-    app = Application.builder().token(TOKEN).build()
+    try:
+        app = Application.builder().token(TOKEN).build()
 
-    #commands
-    app.add_handler(CommandHandler("start", start_command))
-    app.add_handler(CommandHandler("help", help_command))
-    app.add_handler(CommandHandler("nowplaying", nowplaying_command))
-    
-    #messages
-    app.add_handler(MessageHandler(filters.TEXT, handle_message))
+
+        #commands
+        app.add_handler(CommandHandler("start", start_command))
+        app.add_handler(CommandHandler("help", help_command))
+        app.add_handler(CommandHandler("nowplaying", nowplaying_command))
+        
+        #messages
+        app.add_handler(MessageHandler(filters.TEXT, handle_message))
+    except Exception as e:
+        print(f'Error starting bot: {e}')
+        
 
     #errors
     app.add_error_handler(error)
