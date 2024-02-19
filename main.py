@@ -10,10 +10,10 @@ from telegram.ext import Updater
 import requests
 import time
 
-TOKEN: Final = "6809277533:AAG_vo_f5bgK8fLo7vkmkitrNl4D34PI7uA"
+TOKEN: Final = "0000"
+APIKEY: Final = '0000'
 BOT_USERNAME: Final = "@nowplaying_sameerasw_bot"
 APIURL: Final = 'https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=S4m33r4&limit=1&api_key=';
-APIKEY: Final = 'd14224bbdbf51e2b2445f81731bedc57'
 FETCH_URL = f'{APIURL}{APIKEY}&format=json'
 PLAYLIST = 'https://music.youtube.com/playlist?list=PLwPOyB_hI8FvpPFGHdHNEIc7kOowdfoRZ&si=Ih6b0Yh2nsFwpC_E'
 
