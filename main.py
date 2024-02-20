@@ -1,5 +1,3 @@
-# 6809277533:AAG_vo_f5bgK8fLo7vkmkitrNl4D34PI7uA
-
 from typing import Final
 from telegram import Update, Bot
 from telegram import InputMediaPhoto
