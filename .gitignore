@@ -1,9 +1,3 @@
-#ignore .txt files
-        if file.endswith('.txt'):
-            continue
-            
-        if file.endswith('__pycache__'):
-            continue
-
-        if file.endswith('.pyc'):
-            continue
+*.txt
+__pycache__/
+*.pyc
