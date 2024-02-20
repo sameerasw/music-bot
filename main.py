@@ -68,6 +68,7 @@ async def nowplaying_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
         chat_id = update.message.chat.id
         message_id = update.message.message_id
         now_playing_text = fetch_now_playing()
+        # print(now_playing_text)
 
         # send the message as a photo with the album art and the song as a caption and add a button to open song info and another to open the playlist
         await bot.sendPhoto(chat_id, now_playing_text.split('|')[2], caption=now_playing_text.split('|')[0], parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Song info 🎵", url=now_playing_text.split('|')[1]),],[InlineKeyboardButton("Check out my Playlist ▶️", url=PLAYLIST),],[InlineKeyboardButton("Visit my Website 🌐", url=WEBSITE),]]))
@@ -108,6 +109,7 @@ def handle_response(text: str) -> str:
 
 def fetch_now_playing():
     try:
+        old_img = 'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png'
         response = requests.get(FETCH_URL)
         data = response.json()
         track = data['recenttracks']['track'][0]
@@ -116,12 +118,11 @@ def fetch_now_playing():
         image = track['image'][3]['#text']
         url = track['url']
 
-        if image == '':
-            image = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
-        elif image == old_img:
+        # print(image)
+
+        if image == '' or image == old_img:
             image = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
             
-        old_img = image
         return f'<b>@sameera_s_w</b> is listening to: <b>{track["name"]}</b> by <i>{artist}</i> on YouTube Music |{url}|{image}'
     except:
         return "Sorry, I can't get the current song right now. Please try again later.||"
