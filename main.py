@@ -17,6 +17,15 @@ APIURL: Final = 'https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&
 FETCH_URL = f'{APIURL}{APIKEY}&format=json'
 PLAYLIST = 'https://music.youtube.com/playlist?list=PLwPOyB_hI8FvpPFGHdHNEIc7kOowdfoRZ&si=Ih6b0Yh2nsFwpC_E'
 
+# read telegram bot API and audioscrobbler API tokens from the tokens.txt file
+try:
+    with open('tokens.txt', 'r') as file:
+        TOKEN = file.readline().strip
+        APIKEY = file.readline().strip()
+        print(f'Token: {TOKEN}', f'API Key: {APIKEY}', sep='\n')
+except:
+    print('Error reading tokens.txt file')
+
 # commands
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Hi! I'm the music bot who returns you what @sameera_s_w is listening to. Just type /nowplaying to get the current song.")
