@@ -8,6 +8,8 @@ from telegram.ext import Updater
 import requests
 import time
 
+# constants
+REFRESH = 10
 TOKEN: Final = "0000"
 APIKEY: Final = '0000'
 BOT_USERNAME: Final = "@nowplaying_sameerasw_bot"
@@ -30,7 +32,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Hi! I'm the music bot who returns you what @sameera_s_w is listening to. Just type /nowplaying to get the current song.")
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Just type /nowplaying to get the current song.")
+    await update.message.reply_text("Just type /nowplaying to get the current song or reply to an already sent message with /autoupdate to get the current song updated every 10 seconds.")
 
 async def auto_update(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # if the command was a reply to a message, get the chat_id and message_id of the message to update or warn the user
@@ -88,7 +90,7 @@ async def updating(update: Update, context: ContextTypes.DEFAULT_TYPE, chat_id: 
                     continue
 
                 previous_song = now_playing_text
-            time.sleep(10)
+            time.sleep(REFRESH)
 
 # responses
 def handle_response(text: str) -> str:
