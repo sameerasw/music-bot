@@ -14,6 +14,7 @@ TOKEN: Final = "0000"
 APIKEY: Final = '0000'
 BOT_USERNAME: Final = "@nowplaying_sameerasw_bot"
 APIURL: Final = 'https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=S4m33r4&limit=1&api_key=';
+WEBSITE: Final = 'https://t.me/nowplaying_sameerasw_bot/sameerasw'
 
 # read telegram bot API and audioscrobbler API tokens from the tokens.txt file
 try:
@@ -68,7 +69,7 @@ async def nowplaying_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
         now_playing_text = fetch_now_playing()
 
         # send the message as a photo with the album art and the song as a caption and add a button to open song info and another to open the playlist
-        await bot.sendPhoto(chat_id, now_playing_text.split('|')[2], caption=now_playing_text.split('|')[0], parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Song info 🎵", url=now_playing_text.split('|')[1]),],[InlineKeyboardButton("Check out my Playlist ▶️", url=PLAYLIST),]]))
+        await bot.sendPhoto(chat_id, now_playing_text.split('|')[2], caption=now_playing_text.split('|')[0], parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Song info 🎵", url=now_playing_text.split('|')[1]),],[InlineKeyboardButton("Check out my Playlist ▶️", url=PLAYLIST),],[InlineKeyboardButton("Visit my Website 🌐", url=WEBSITE),]]))
 
         previous_song = now_playing_text
         #update the message every 30 seconds
@@ -83,7 +84,7 @@ async def updating(update: Update, context: ContextTypes.DEFAULT_TYPE, chat_id: 
                 media = InputMediaPhoto(media=now_playing_text.split('|')[2], caption=now_playing_text.split('|')[0], parse_mode=ParseMode.HTML)
 
                 try:
-                    await bot.edit_message_media(chat_id=chat_id, message_id=message_id + 1, media=media, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Song info 🎵", url=now_playing_text.split('|')[1]),],[InlineKeyboardButton("Check out my Playlist ▶️", url=PLAYLIST),]]))
+                    await bot.edit_message_media(chat_id=chat_id, message_id=message_id + 1, media=media, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Song info 🎵", url=now_playing_text.split('|')[1]),],[InlineKeyboardButton("Check out my Playlist ▶️", url=PLAYLIST),],[InlineKeyboardButton("Visit my Website 🌐", url=WEBSITE),]]))
                     print("Message edited successfully!", now_playing_text.split('|')[0], ' in chat:', chat_id)
                 except Exception as e:
                     print(f"Error editing message: {e}")
