@@ -15,6 +15,7 @@ APIKEY: Final = '0000'
 BOT_USERNAME: Final = "@nowplaying_sameerasw_bot"
 APIURL: Final = 'https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=S4m33r4&limit=1&api_key=';
 WEBSITE: Final = 'https://t.me/nowplaying_sameerasw_bot/sameerasw'
+old_img = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
 
 # read telegram bot API and audioscrobbler API tokens from the tokens.txt file
 try:
@@ -115,12 +116,12 @@ def fetch_now_playing():
         image = track['image'][3]['#text']
         url = track['url']
 
-        old_img = image
-
         if image == '':
             image = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
         elif image == old_img:
             image = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
+        else:
+            old_img = image
 
         return f'<b>@sameera_s_w</b> is listening to: <b>{track["name"]}</b> by <i>{artist}</i> on YouTube Music |{url}|{image}'
     except:
