@@ -120,9 +120,8 @@ def fetch_now_playing():
             image = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
         elif image == old_img:
             image = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
-        else:
-            old_img = image
-
+            
+        old_img = image
         return f'<b>@sameera_s_w</b> is listening to: <b>{track["name"]}</b> by <i>{artist}</i> on YouTube Music |{url}|{image}'
     except:
         return "Sorry, I can't get the current song right now. Please try again later.||"
