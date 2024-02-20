@@ -115,7 +115,11 @@ def fetch_now_playing():
         image = track['image'][3]['#text']
         url = track['url']
 
+        old_img = image
+
         if image == '':
+            image = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
+        elif image == old_img:
             image = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
 
         return f'<b>@sameera_s_w</b> is listening to: <b>{track["name"]}</b> by <i>{artist}</i> on YouTube Music |{url}|{image}'
