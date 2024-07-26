@@ -24,7 +24,9 @@ try:
         APIKEY = file.readline().strip()
         print(f'Token: {TOKEN}', f'API Key: {APIKEY}', sep='\n')
 except:
-    print('Error reading tokens.txt file')
+    # ask for the tokens if the file is not found
+    TOKEN = input('Enter your Telegram Bot API token: ')
+    APIKEY = input('Enter your Audioscrobbler API key: ')
 
 FETCH_URL = f'{APIURL}{APIKEY}&format=json'
 PLAYLIST = 'https://music.youtube.com/playlist?list=PLwPOyB_hI8FvpPFGHdHNEIc7kOowdfoRZ&si=Ih6b0Yh2nsFwpC_E'
