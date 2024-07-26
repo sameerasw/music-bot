@@ -9,7 +9,7 @@ import requests
 import time
 
 # constants
-REFRESH = 10
+REFRESH = 20
 TOKEN: Final = "0000"
 APIKEY: Final = '0000'
 BOT_USERNAME: Final = "@nowplaying_sameerasw_bot"
@@ -81,7 +81,7 @@ async def updating(update: Update, context: ContextTypes.DEFAULT_TYPE, chat_id: 
     while True:
             now_playing_text = fetch_now_playing()
             if now_playing_text != previous_song:
-                
+
                 # update the message as a photo with the album art and the song as a caption using editMessageMedia
                 media = InputMediaPhoto(media=now_playing_text.split('|')[2], caption=now_playing_text.split('|')[0], parse_mode=ParseMode.HTML)
 
@@ -122,7 +122,7 @@ def fetch_now_playing():
 
         if image == '' or image == old_img:
             image = 'https://raw.githubusercontent.com/sameerasw/music-bot/main/logo.jpg'
-            
+
         return f'<b>@sameera_s_w</b> is listening to: <b>{track["name"]}</b> by <i>{artist}</i> on YouTube Music |{url}|{image}'
     except:
         return "Sorry, I can't get the current song right now. Please try again later.||"
@@ -142,7 +142,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
     else:
         response: str = handle_response(text)
-    
+
     print('Bot:', response)
     await update.message.reply_text(response)
 
@@ -160,7 +160,7 @@ if __name__ == '__main__':
         app.add_handler(CommandHandler("help", help_command))
         app.add_handler(CommandHandler("nowplaying", nowplaying_command))
         app.add_handler(CommandHandler("autoupdate", auto_update))
-        
+
         #messages
         app.add_handler(MessageHandler(filters.TEXT, handle_message))
     except Exception as e:
